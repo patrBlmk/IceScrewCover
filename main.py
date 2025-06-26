@@ -1,5 +1,26 @@
-import math
+"""
+File   : main.py
+Author : Patrick Bluemcke
+Date   : Date of creation/modification
+Desc   : Creates a STL file for a ice screw cover with several parameters (All dimensions in mm).
+         Non-self-explanatory parameters:
+            - slot_depth      : Side slots can be added to cylinder to make design lighter. Can be set to 0 to remove slots
+            - slot_width      : With of above slots
+            - thread_depth    : Depth of internal thread for ice screw, in mm
+            - base_height     : Height of base/bottom, in mm
+            - base_radius     : Base has a hole in the middle, this is this hole's radius
+            - ring_sections   : STL ring resolution (more sections leads to smoother rings/circles)
+            - num_grippers    : Grippers are side elements to help gripping the cover. Equally spaced around the outer wall.
+            - rotate_grippers : If true, grippers are rotated by 45°. Can be used with a high number of grippers to create a knurled outer surface
+            - plank_width     : Plank across the base hole. Can be used to add a thread to the cover. This controls its width
+"""
 
+
+                                    
+                                
+
+
+import math
 import numpy as np
 import trimesh
 from trimesh import transformations
@@ -111,12 +132,7 @@ def trim_top(part, thread_depth, inner_radius, height, ring_sections):
     part = part.difference(cone)
     return part
 
-def create_threaded_ring(outer_radius, inner_radius, height, thread_pitch, slot_depth, slot_width, base_height, base_radius):
-    ring_sections = 100
-    num_grippers = 10
-    thread_depth = 1
-    rotate_grippers = False
-    plank_width = outer_radius / 5
+def create_screw_cover(outer_radius, inner_radius, height, thread_pitch, slot_depth, slot_width, base_height, base_radius, ring_sections, num_grippers, thread_depth, rotate_grippers, plank_width): 
 
     part = create_main_body(outer_radius, inner_radius, height, ring_sections)
     part = add_grippers(part, outer_radius, inner_radius, num_grippers, rotate_grippers, height)
@@ -128,15 +144,20 @@ def create_threaded_ring(outer_radius, inner_radius, height, thread_pitch, slot_
     return part
 
 
-# Create the threaded ring
-threaded_ring = create_threaded_ring(outer_radius=17,
+# Create the ice screw cover
+ice_screw_cover = create_screw_cover(outer_radius=17,
                                      inner_radius=15,
                                      height=30,
                                      thread_pitch=8,
                                      slot_depth=22,
                                      slot_width=4,
                                      base_height=2,
-                                     base_radius=10)
+                                     base_radius=10,
+                                     ring_sections=100,
+                                     num_grippers=10,
+                                     thread_depth=1,
+                                     rotate_grippers=False,
+                                     plank_width=4)
 
 # Export to STL
-threaded_ring.export('C:/threaded_ring.stl')
+ice_screw_cover.export('C:/ice_screw_cover.stl')
